@@ -214,3 +214,29 @@ def created():
 @app.errorhandler(404)
 def not_found(err):
     return "Страница не найдена", 404
+
+@app.route("/error/400")
+def error_400():
+    return "Ошибка 400: Неверный запрос", 400
+
+@app.route("/error/401")
+def error_401():
+    return "Ошибка 401: Требуется авторизация", 401
+
+@app.route("/error/402")
+def error_402():
+    return "Ошибка 402: Требуется оплата", 402
+
+@app.route("/error/403")
+def error_403():
+    return "Ошибка 403: Доступ запрещён", 403
+
+@app.route("/error/405")
+def error_405():
+    return "Ошибка 405: Метод не поддерживается", 405
+
+@app.route("/error/418")
+def error_418():
+    return "Ошибка 418: Я - чайник ( Эта ошибка ссылается на Hyper Text Coffee Pot Control Protocol (гипертекстовый протокол кофейников) который был первоапрельской шуткой в 1998 году.)", 418
+
+
