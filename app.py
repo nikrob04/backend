@@ -277,7 +277,7 @@ def cause_error():
     return 1 / 0
 
 @app.errorhandler(500)
-def internal_server_error():
+def internal_server_error(e):
     return '''
     <!doctype html>
     <html>
@@ -290,7 +290,7 @@ def internal_server_error():
             <a href="/">Вернуться на главную страницу</a>
         </body>
     </html>
-    ''', 500
+''', 500
 
 @app.route("/lab1/onemore")
 def onemore():
@@ -334,3 +334,14 @@ def onemore():
         'Developer': 'Nikitenko',
         'Powered-By': 'Py',
     }
+
+#Laba2
+
+flower_list = ('роза', 'тюлпан', 'незабудка', 'ромашка')
+@app.route('/lab2/flowers/<int:flower_id>')
+def flowers(flower_id):
+    if flower_id >= len(flower_list):
+        return "Такого цветка нет", 404
+    else:
+        return "цветок: " + flower_list[flower_id]
+
