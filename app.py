@@ -79,14 +79,14 @@ def lab1():
                         footer {
                             background-color: #225a8b;
                             color: white;
-                            padding: 10px;
+               
                             text-align: center;
                             position: absolute;
                             width: 100%;
                             bottom: 0;
                         }
                         main {
-                            padding: 20px;
+                  
                             text-align: center;
                         }
                 </style>
@@ -99,14 +99,22 @@ def lab1():
                     <p>Flask — фреймворк для создания веб-приложений на языке программирования Python, 
                     использующий набор инструментов Werkzeug, а также шаблонизатор Jinja2. Относится к категории так называемых микрофреймворков —
                     минималистичных каркасов веб-приложений, сознательно предоставляющих лишь самые базовые возможности.</p>
-                    <p><a href="/">Вернуться на главную страницу</a></p>
-
                     <h2>Ссылки задания</h2>
                     <ul>
                         <li><a href="/lab1/oak">Дуб</a></li>
                         <li><a href="/lab1/counter">Счётчик посещений</a></li>
                         <li><a href="/lab1/created">Создание</a></li>
+                        <li><a href="/lab1/cause_error">500 Ошибка</a></li>
+                        <li><a href="/lab1/web">Web</a></li>
+                        <li><a href="/lab1/author">Автор</a></li>
+                        <li><a href="/lab1/onemore">Best car</a></li>
+                        <li><a href="/error/400">400</a></li>
+                        <li><a href="/error/401">401</a></li>
+                        <li><a href="/error/402">402</a></li>
+                        <li><a href="/error/403">403</a></li>
+                        <li><a href="/error/418">418</a></li>
                     </ul>
+                    <p><a href="/">Вернуться на главную страницу</a></p>
                 </main>
                 <footer>
                     <p>&copy; НГТУ, ФБ, 2024, Никтенко И.Р. Фби-21</p>
