@@ -264,4 +264,65 @@ def error_405():
 def error_418():
     return "Ошибка 418: Я - чайник ( Эта ошибка ссылается на Hyper Text Coffee Pot Control Protocol (гипертекстовый протокол кофейников) который был первоапрельской шуткой в 1998 году.)", 418
 
+@app.route("/lab1/cause_error")
+def cause_error():
+    return 1 / 0
 
+@app.errorhandler(500)
+def internal_server_error():
+    return '''
+    <!doctype html>
+    <html>
+        <head>
+            <title>Ошибка 500 - Внутренняя ошибка сервера</title>
+        </head>
+        <body>
+            <h1>Внутренняя ошибка сервера (500)</h1>
+            <p>Произошла ошибка на сервере. Пожалуйста, попробуйте снова позже.</p>
+            <a href="/">Вернуться на главную страницу</a>
+        </body>
+    </html>
+    ''', 500
+
+@app.route("/lab1/onemore")
+def onemore():
+    img_paht = url_for('static', filename='car.jpg')
+    return '''
+    <!doctype html>
+    <html>
+        <head>
+            <title>Очень надежная машина</title>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    margin: 20px;
+                    background-color: #f0f0f0;
+                }
+                h1 {
+                    color: #225a8b;
+                }
+                p {
+                    font-size: 18px;
+                    color: #333;
+                }
+                img {
+                    width: 100%;
+                    max-width: 600px;
+                    height: auto;
+                    border: 1px solid #ccc;
+                    border-radius: 10px;
+                    margin-top: 20px;
+                }
+            </style>
+        </head>
+        <body>
+            <h1>Мой крайне наджный автомобиль</h1>
+            <p> Автомобиль назван в честь племени кашкаев (существует также вариант прочтения «кашк'и») из иранской провинции Фарс. Первое поколение было известно как Nissan Dualis в Японии и Австралии и как Nissan Xiaoke в Китае.</p>
+            <p>Вот пример изображения, которое я выбрал для оформления страницы:</p>
+            <img src="''' + img_paht + '''">
+        </body>
+    ''', 200, {
+        'Content-Language': 'ru',
+        'Developer': 'Nikitenko',
+        'Powered-By': 'Py',
+    }
