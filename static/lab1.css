@@ -1,0 +1,17 @@
+h1 {
+    color: #228B22;
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+
+img {
+    border: 5px solid #228B22;
+    border-radius: 10px;
+    max-width: 100%;
+    height: auto;
+}
+body {
+    background-color: #f0f8ff;
+
+}
