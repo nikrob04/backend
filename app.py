@@ -61,3 +61,19 @@ def counter():
 @app.route("/info")
 def info():
     return redirect("/author")
+
+@app.route("/lab1/created")
+def created():
+    return '''
+<!doctype html>
+<html>
+    <body>
+        <h1>Созданно успешно</h1>
+        <div>Что-то там</div>
+    </body>
+</html>
+''', 201
+
+@app.errorhandler(404)
+def not_found(err):
+    return "Страница не найдена", 404
