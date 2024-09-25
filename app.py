@@ -213,7 +213,32 @@ def created():
 
 @app.errorhandler(404)
 def not_found(err):
-    return "Страница не найдена", 404
+    path = url_for("static", filename="cat.jpg")
+    return '''
+<!doctype html>
+<html>
+    <head>
+        <style>
+        img {
+            border: 5px solid #228B22;
+            border-radius: 10px;
+            max-width: 100%;
+            height: auto;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #FFDAB9;
+        }
+        </style>
+        
+    </head>
+    <body>
+        <h1>Ты думал что-то здесь будет?</h1>
+        <div>Здесь никогда ничего небыло и, наверное, не будет, поищи в другом месте</div>
+        <img src="''' + path + '''">
+    </body>
+</html>
+''', 404
 
 @app.route("/error/400")
 def error_400():
