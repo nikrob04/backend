@@ -337,7 +337,7 @@ def onemore():
 
 #Laba2
 
-flower_list = ('роза', 'тюлпан', 'незабудка', 'ромашка')
+flower_list = ['роза', 'тюлпан', 'незабудка', 'ромашка']
 @app.route('/lab2/flowers/<int:flower_id>')
 def flowers(flower_id):
     if flower_id >= len(flower_list):
@@ -345,3 +345,17 @@ def flowers(flower_id):
     else:
         return "цветок: " + flower_list[flower_id]
 
+@app.route('/lab2/add_flower/<name>')
+def add_flower(name):
+    flower_list.append(name)
+    return f'''
+<!doctype html>
+<html>
+    <body>
+    <h1>Добавлен новый цветок</h1>
+    <p>Название нового цветка:  {name} </p>
+    <p>Всего цветов: {len(flower_list)}</p>
+    <p>Полный список: {flower_list}</p>
+    </body>
+</html>
+'''
