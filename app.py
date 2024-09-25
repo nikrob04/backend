@@ -3,6 +3,120 @@ from flask import Flask, url_for, redirect
 app = Flask (__name__)
 
 @app.route("/")
+def zero():
+    return '''
+    <!doctype html> 
+        <html>
+            <head>
+                <title>НГТУ, ФБ, Лабораторные работы</title> 
+                <style>
+                        
+                        body {
+                            font-family: Arial, sans-serif;
+                            margin: 0;
+                            padding: 0;
+                            background-color: #f0f0f0;
+                        }
+                        header {
+                            background-color: #225a8b;
+                            color: white;
+                            padding: 20px;
+                            text-align: center;
+                        }
+                        footer {
+                            background-color: #225a8b;
+                            color: white;
+                            padding: 10px;
+                            text-align: center;
+                            position: absolute;
+                            width: 100%;
+                            bottom: 0;
+                        }
+                        main {
+                            padding: 20px;
+                            text-align: center;
+                        }
+                </style>
+            </head>
+            <body>
+                <header>
+                    <h1>НГТУ, ФБ, WEB-программирование, часть 2. Список лабораторных</h1>
+                </header>
+                <main>
+                    <h2>Список лабораторных работ</h2>
+                    <a href="/lab1">Лабораторная 1</a></li>
+                </main>
+                <footer>
+                    <p>&copy; НГТУ, ФБ, 2024, Никтенко И.Р. Фби-21</p>
+                </footer>
+            </body>
+        </html> '''
+@app.route("/index")
+def index():
+    return redirect("/")
+
+
+@app.route("/lab1")
+def lab1():
+    return '''
+    <!doctype html> 
+        <html>
+            <head>
+                <title>Лабораторная 1</title> 
+                <style>
+                    body {
+                            font-family: Arial, sans-serif;
+                            margin: 0;
+                            padding: 0;
+                            background-color: #f0f0f0;
+                        }
+                        header {
+                            background-color: #225a8b;
+                            color: white;
+                            padding: 20px;
+                            text-align: center;
+                        }
+                        footer {
+                            background-color: #225a8b;
+                            color: white;
+                            padding: 10px;
+                            text-align: center;
+                            position: absolute;
+                            width: 100%;
+                            bottom: 0;
+                        }
+                        main {
+                            padding: 20px;
+                            text-align: center;
+                        }
+                </style>
+            </head>
+            <body>
+                <header>
+                    <h1>Лабораторная 1</h1>
+                </header>
+                <main>
+                    <p>Flask — фреймворк для создания веб-приложений на языке программирования Python, 
+                    использующий набор инструментов Werkzeug, а также шаблонизатор Jinja2. Относится к категории так называемых микрофреймворков —
+                    минималистичных каркасов веб-приложений, сознательно предоставляющих лишь самые базовые возможности.</p>
+                    <p><a href="/">Вернуться на главную страницу</a></p>
+
+                    <h2>Ссылки задания</h2>
+                    <ul>
+                        <li><a href="/lab1/oak">Дуб</a></li>
+                        <li><a href="/lab1/counter">Счётчик посещений</a></li>
+                        <li><a href="/lab1/created">Создание</a></li>
+                    </ul>
+                </main>
+                <footer>
+                    <p>&copy; НГТУ, ФБ, 2024, Никтенко И.Р. Фби-21</p>
+                </footer>
+            </body>
+        </html>
+    '''
+
+
+
 @app.route("/lab1/web")
 def start():
     return '''<!doctype html> 
