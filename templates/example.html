@@ -3,22 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Никтенко Илья. Лабораторная работа {{lab_num}}</title>
+    <title>
+        {% if name %}
+            {{ name }}
+        {% else %}
+            Анонимус
+        {% endif %}
+        . Лабораторная работа {{ lab_num }}
+    </title>
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
 </head>
 <body>
     <header>
-        WEB-программирование, часть 2. Лабораторная работа {{lab_num}}
+        WEB-программирование, часть 2. {% if lab_num %}Лабораторная работа №{{ lab_num }}{% endif %}
     </header>
     <main>
         5+2 = {{ 5 + 2 }}<br>
-        11x28 = {{ 11*28 }} <br>
-        3258-759 = {{ 3258 -759 }} <br>
-        8452/793 = {{8452/793}} <br>
-        45<sup>8</sup> = {{45**8}} <br>
+        11x28 = {{ 11 * 28 }} <br>
+        3258-759 = {{ 3258 - 759 }} <br>
+        8452/793 = {{ 8452 / 793 }} <br>
+        45<sup>8</sup> = {{ 45**8 }} <br>
     </main>
     <footer>
-        &copy; {{name}}, {{group}}, 2024, {{curs}}
+        &copy; 
+        {% if name %}
+            {{ name }},
+        {% else %}
+            Анонимус,
+        {% endif %}
+        {% if group %}
+            {{ group }},
+        {% else %}
+            ФБИ-**,
+        {% endif %}
+        {% if curs %}
+            {{ curs }},
+        {% else %}
+            Курс неизвестен,
+        {% endif %}
+        2024
     </footer>
 </body>
 </html>
