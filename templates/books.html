@@ -1,0 +1,24 @@
+{% extends "base.html"%}
+
+{# Номер лаб. работы: #}
+{%block lab%} Лабораторная работа №2 {%endblock%}
+
+{# Основная часть: #}
+{%block main%}
+    <h1>Книги</h1>
+    <table border="1" cellpadding="10">
+        <tr>
+            <th>Автор</th>
+            <th>Название</th>
+            <th>Жанр</th>
+            <th>Количество страниц</th>
+        </tr>
+        {% for book in books %}
+        <tr>
+            <td>{{ book.author }}</td>
+            <td>{{ book.title }}</td>
+            <td>{{ book.genre }}</td>
+            <td>{{ book.pages }}</td>
+        </tr>
+        {% endfor %}
+{%endblock%}

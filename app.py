@@ -472,3 +472,19 @@ def calc_with_one(a):
     return redirect(f'/lab2/calc/{a}/1')
 
 
+books = [
+    {"author": "Джордж Оруэлл", "title": "1984", "genre": "Антиутопия", "pages": 328},
+    {"author": "Рэй Брэдбери", "title": "451 градус по Фаренгейту", "genre": "Антиутопия", "pages": 256},
+    {"author": "Михаил Булгаков", "title": "Собачье сердце", "genre": "Фантастика", "pages": 128},
+    {"author": "Фёдор Достоевский", "title": "Преступление и наказание", "genre": "Классика", "pages": 672},
+    {"author": "Джейсон Шрейер", "title": "Кровь, пот и пиксели", "genre": "Документальная литература", "pages": 320},
+    {"author": "Марк Твен", "title": "Приключения Тома Сойера", "genre": "Приключения", "pages": 244},
+    {"author": "Дж. Р. Р. Толкин", "title": "Властелин колец", "genre": "Фэнтези", "pages": 1178},
+    {"author": "Лев Толстой", "title": "Война и мир", "genre": "Классика", "pages": 1225},
+    {"author": "Джейн Остин", "title": "Гордость и предубеждение", "genre": "Роман", "pages": 432},
+    {"author": "Харпер Ли", "title": "Убить пересмешника", "genre": "Роман", "pages": 281},
+]
+@app.route('/lab2/books')
+def books_list():
+    return render_template('books.html', books=books)   
+
