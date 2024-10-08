@@ -488,3 +488,15 @@ books = [
 def books_list():
     return render_template('books.html', books=books)   
 
+
+dogs = [
+    {"filename": "dogfox.jpg", "name": "Фокстерьер", "description": "Эта собака была предназначена для охоты на лисиц."},
+    {"filename": "cwergdog.jpg", "name": "Цвергшнауцер", "description": "Самая маленькая по размеру служебная собака в мире."},
+    {"filename": "erdel.jpg", "name": "Эрдельтерьер", "description": "Родина породы — долина реки Эйр в графстве Йоркшир."},
+    {"filename": "tibet.jpg", "name": "Тибетский мастиф", "description": "Крупная порода собак, которую исторически разводили в Тибете, Непале, Индии."},
+    {"filename": "mops.jpg", "name": "Мопс", "description": "Порода декоративных собак. Мопсы были привезены из Китая в Европу в XVI веке."}
+]
+
+@app.route('/lab2/dogs')
+def show_dogs():
+    return render_template('dogs.html', dogs=dogs)
