@@ -443,10 +443,32 @@ def exemple():
 def lab2():
     return render_template('lab2.html')
 
-@app.route('/lab2/filters')
+@app.route('/lab2/filters/')
 def filters():
     phrase = "О <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..."
     return render_template('filter.html', phrase = phrase)
 
+@app.route('/lab2/calc/<int:a>/<int:b>/')
+def calc(a, b):
+    return f'''
+<!doctype html>
+<html>
+    <body>
+    <h1>Мат. операции</h1>
+    <p>{a} + {b} = {a+b}</p>
+    <p>{a} - {b} = {a-b}</p>
+    <p>{a} x {b} = {a*b}</p>
+    <p>{a} &divide; {b} = {a/b}</p>
+    <p>{a}<sup>{b}</sup> = {a**b}</p>
+    
+    </body>
+</html>
+'''
+@app.route('/lab2/calc/')
+def calc_default():
+    return redirect('/lab2/calc/1/1')
+@app.route('/lab2/calc/<int:a>/')
+def calc_with_one(a):
+    return redirect(f'/lab2/calc/{a}/1')
 
 
