@@ -86,3 +86,6 @@ div.menu:hover {
     background-color: var(--text-color);
     box-shadow: 0 0 15px black;
 }
+span.error {
+    color: red;
+}
