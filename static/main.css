@@ -89,3 +89,21 @@ div.menu:hover {
 span.error {
     color: red;
 }
+
+label.drink-option, label.addon-option {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.drink-name, .addon-name {
+    display: flex;
+    align-items: center;
+    margin-left: 8px;
+}
+
+.price {
+    margin-left: 10px;
+    font-size: 14px;
+    color: gray;
+}

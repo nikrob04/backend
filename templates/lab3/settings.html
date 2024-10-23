@@ -1,0 +1,35 @@
+{% extends "base.html"%}
+
+{# Номер лаб. работы: #}
+{%block lab%} Лабораторная работа №3 {%endblock%}
+
+{# Основная часть: #}
+{%block main%}
+    <h1>Cookies</h1>
+    <form>
+        <div>
+            <label for="color">Выберете цвет текста:</label>
+            <input type="color" id="color" name="color" value="{{color or ''}}">
+        </div>
+        <div>
+            <label for="font-size">Выберете размер шрифта:</label>
+            <input type="text" name="font-size" id="font-size" value="{{fontsize or ''}}">
+        </div>
+        <div>
+            <label for="background-color">Выберете цвет заднего фона:</label>
+            <input type="color" id="background-color" name="background-color" value="{{backgroundcolor or ''}}">
+        </div>
+        <div>
+        <label for="font-family">Выберите шрифт:</label>
+        <select name="font-family" id="font-family">
+            <option value="Times" {% if fontfamily == "Times" %}selected{% endif %}>Times</option>
+            <option value="Courier New" {% if fontfamily == "Courier New" %}selected{% endif %}>Courier New</option>
+            <option value="Segoe UI" {% if fontfamily == "Segoe UI, Tahoma" %}selected{% endif %}>Segoe UI</option>
+
+        </select>
+        </div>
+        <div>
+            <button type="submit">OK</button>
+        </div>
+    </form>
+{%endblock%}
