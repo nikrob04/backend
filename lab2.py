@@ -61,7 +61,7 @@ def add_flower_no_name():
 # для добавления нового цветка
 @lab2.route('/lab2/add_flower/<name>')
 def add_flower(name):
-    flower_list.lab2end(name)
+    flower_list.append(name)
     return f'''
 <!doctype html>
 <html>
@@ -102,18 +102,18 @@ def exemple():
               {'name': 'мандарины','price': 95},
               {'name': 'манго', 'price': 321}
     ]
-    return render_template('example.html', name=name, lab_num=lab_num, group=group, curs=curs, fruits=fruits)
+    return render_template('lab2/example.html', name=name, lab_num=lab_num, group=group, curs=curs, fruits=fruits)
 
 @lab2.route('/lab2/')
 def lab():
-    return render_template('lab2.html')
+    return render_template('lab2/lab2.html')
 
 @lab2.route('/lab2/filters/')
 def filters():
     phrase = "О <b>сколько</b> <u>нам</u> <i>открытий</i> чудных..."
-    return render_template('filter.html', phrase = phrase)
+    return render_template('lab2/filter.html', phrase = phrase)
 
-@lab2.route('/lab2/calc/<int:a>/<int:b>/')
+@lab2.route('/lab2/calc/<float:a>/<int:b>/')
 def calc(a, b):
     return f'''
 <!doctype html>
@@ -151,17 +151,17 @@ books = [
 ]
 @lab2.route('/lab2/books')
 def books_list():
-    return render_template('books.html', books=books)   
+    return render_template('lab2/books.html', books=books)   
 
 
 dogs = [
-    {"filename": "dogfox.jpg", "name": "Фокстерьер", "description": "Эта собака была предназначена для охоты на лисиц."},
-    {"filename": "cwergdog.jpg", "name": "Цвергшнауцер", "description": "Самая маленькая по размеру служебная собака в мире."},
-    {"filename": "erdel.jpg", "name": "Эрдельтерьер", "description": "Родина породы — долина реки Эйр в графстве Йоркшир."},
-    {"filename": "tibet.jpg", "name": "Тибетский мастиф", "description": "Крупная порода собак, которую исторически разводили в Тибете, Непале, Индии."},
-    {"filename": "mops.jpg", "name": "Мопс", "description": "Порода декоративных собак. Мопсы были привезены из Китая в Европу в XVI веке."}
+    {"filename": "lab2/dogfox.jpg", "name": "Фокстерьер", "description": "Эта собака была предназначена для охоты на лисиц."},
+    {"filename": "lab2/cwergdog.jpg", "name": "Цвергшнауцер", "description": "Самая маленькая по размеру служебная собака в мире."},
+    {"filename": "lab2/erdel.jpg", "name": "Эрдельтерьер", "description": "Родина породы — долина реки Эйр в графстве Йоркшир."},
+    {"filename": "lab2/tibet.jpg", "name": "Тибетский мастиф", "description": "Крупная порода собак, которую исторически разводили в Тибете, Непале, Индии."},
+    {"filename": "lab2/mops.jpg", "name": "Мопс", "description": "Порода декоративных собак. Мопсы были привезены из Китая в Европу в XVI веке."}
 ]
 
 @lab2.route('/lab2/dogs')
 def show_dogs():
-    return render_template('dogs.html', dogs=dogs)
+    return render_template('lab2/dogs.html', dogs=dogs)
