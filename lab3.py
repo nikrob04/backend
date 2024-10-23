@@ -99,6 +99,8 @@ def railway():
     arrival = ''
     date = ''
     insurance = False
+    bed = False
+    baggage = False
 
     if request.method == 'POST':
         user = request.form.get('user')
@@ -109,8 +111,10 @@ def railway():
         arrival = request.form.get('arrival')
         date = request.form.get('date')
         insurance = request.form.get('insurance')
+        bed = request.form.get('bed')
+        baggage = request.form.get('baggage')
 
-        # Проверка всех полей
+        
         if not user:
             errors['user'] = 'Заполните поле!'
         
@@ -127,12 +131,12 @@ def railway():
             errors['date'] = 'Выберите дату!'
 
         if not errors:
-            # Если ошибок нет, перенаправляем на страницу с оплатой
+            
             return redirect(url_for('lab3.payrail', user=user, age=age, sex=sex, place=place, 
                                     departure=departure, arrival=arrival, date=date, 
-                                    insurance='on' if insurance else 'off'))
+                                    insurance='on' if insurance else 'off', bed='on' if bed else 'off', baggage='on' if baggage else 'off' ))
 
-    # Отображаем форму с ошибками (если есть) или просто GET запрос
+    
     return render_template(
         'lab3/railway.html', 
         user=user, age=age, sex=sex, place=place,
@@ -147,19 +151,24 @@ def payrail():
     age = int(request.args.get('age'))
     place = request.args.get('place')
     insurance = request.args.get('insurance') == 'on'
+    bed = request.args.get('bed') == 'on'
+    baggage = request.args.get('baggage') == 'on'
 
-    # Расчет стоимости
+    
     price = 1000 if age >= 18 else 700
 
-    # Доплата за полку (нижняя или нижняя боковая)
+    # Доплата за полку 
     if place in ['leftdawn', 'rightdawn']:
         price += 100
 
     # Доплата за страховку
     if insurance:
         price += 150
-
-    # Определяем тип билета
+    if bed:
+        price += 75
+    if baggage:
+        price += 250
+    
     ticket_type = 'Взрослый билет' if age >= 18 else 'Детский билет'
 
     return render_template('lab3/payrail.html', user=user, ticket_type=ticket_type, price=price)

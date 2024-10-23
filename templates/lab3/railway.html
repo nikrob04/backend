@@ -55,6 +55,18 @@
         </label>
     </div>
     <div>
+        <label class="bed">
+            <input type="checkbox" name="bed" {{ 'checked' if bed else '' }}>
+            <span class="insurance">Бельё</span>
+        </label>
+    </div>
+    <div>
+        <label class="baggage">
+            <input type="checkbox" name="baggage" {{ 'checked' if baggage else '' }}>
+            <span class="baggage">Багаж</span>
+        </label>
+    </div>
+    <div>
         <button type="submit">Отправить</button>
     </div>
 </form>
