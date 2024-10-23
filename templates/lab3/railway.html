@@ -1,0 +1,63 @@
+{% extends "base.html"%}
+
+{# Номер лаб. работы: #}
+{%block lab%} Лабораторная работа №3 {%endblock%}
+
+{# Основная часть: #}
+{%block main%}
+<form action="/lab3/railway" method="post">
+    <h1>Покупка билета</h1>
+    <label>Ваше имя:</label>
+    <div>
+        <input type="text" placeholder="Как вас зовут?" name="user" value="{{ user or '' }}">
+        <span class="error">{{ errors.user }}</span>
+    </div>
+    <label>Ваш возраст:</label>
+    <div>
+        <input type="number" name="age" value="{{ age or '' }}">
+        <span class="error">{{ errors.age }}</span>
+    </div>
+    <label>Ваш пол:</label>
+    <div>
+        <select name="sex">
+            <option value="male" {{ sex == 'male' and 'selected' }}>Мужчина</option>
+            <option value="female" {{ sex == 'female' and 'selected' }}>Женщина</option>
+        </select>
+    </div>
+    <label>Полка:</label>
+    <div>
+        <select name="place">
+            <option value="leftdawn" {{ place == 'leftdawn' and 'selected' }}>Нижняя левая</option>
+            <option value="rightdawn" {{ place == 'rightdawn' and 'selected' }}>Правая нижняя</option>
+            <option value="rightup" {{ place == 'rightup' and 'selected' }}>Правая верхняя</option>
+            <option value="leftup" {{ place == 'leftup' and 'selected' }}>Левая верхняя</option>
+        </select>
+    </div>
+    <label>Пункт отправления:</label>
+    <div>
+        <input type="text" name="departure" value="{{ departure or '' }}">
+        <span class="error">{{ errors.departure }}</span>
+    </div>
+    <label>Пункт прибытия:</label>
+    <div>
+        <input type="text" name="arrival" value="{{ arrival or '' }}">
+        <span class="error">{{ errors.arrival }}</span>
+    </div>
+    <label>Дата:</label>
+    <div>
+        <input type="date" name="date" value="{{ date or '' }}">
+        <span class="error">{{ errors.date }}</span>
+    </div>
+    <div>
+        <label class="insurance">
+            <input type="checkbox" name="insurance" {{ 'checked' if insurance else '' }}>
+            <span class="insurance">Страховка</span>
+        </label>
+    </div>
+    <div>
+        <button type="submit">Отправить</button>
+    </div>
+</form>
+
+
+{%endblock%}

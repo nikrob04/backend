@@ -32,4 +32,9 @@
             <button type="submit">OK</button>
         </div>
     </form>
+
+    <form action="{{ url_for('lab3.clear_settings') }}" method="get">
+        <button type="submit">Очистить настройки</button>
+    </form>
 {%endblock%}
+

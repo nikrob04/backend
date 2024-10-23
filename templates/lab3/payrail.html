@@ -1,0 +1,12 @@
+{% extends "base.html"%}
+
+{# Номер лаб. работы: #}
+{%block lab%} Лабораторная работа №3 {%endblock%}
+
+{# Основная часть: #}
+{% block main %}
+    <h1>Билет</h1>
+    <div>Имя: {{ user }}</div>
+    <div>Тип билета: {{ ticket_type }}</div>
+    <div>Сумма к оплате: {{ price }} руб.</div>
+{% endblock %}
