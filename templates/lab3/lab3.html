@@ -6,7 +6,7 @@
 {# Основная часть: #}
 {%block main%}
     <h1>Формы. Cookie</h1>
-    <div>Привет, <span style="color: {{name_color}}">{{name}}</span>!</div>
+    <div>Привет, <span style="color: {{name_color}}">{{name or 'Юзернейм'}}</span>!</div>
     <div>Список сделанных страниц:</div>
     <ol>
         <li>
