@@ -88,33 +88,21 @@ def settings():
     resp = make_response(render_template('lab3/settings.html', color=color, fontsize=fontsize, backgroundcolor=backgroundcolor, fontfamily=fontfamily))
     return resp
 
-@lab3.route('/lab3/railway', methods=['GET', 'POST'])
+@lab3.route('/lab3/railway')
 def railway():
     errors = {}
-    user = ''
-    age = ''
-    sex = ''
-    place = ''
-    departure = ''
-    arrival = ''
-    date = ''
-    insurance = False
-    bed = False
-    baggage = False
+    user = request.args.get('user', '')
+    age = request.args.get('age', '')
+    sex = request.args.get('sex', '')
+    place = request.args.get('place', '')
+    departure = request.args.get('departure', '')
+    arrival = request.args.get('arrival', '')
+    date = request.args.get('date', '')
+    insurance = request.args.get('insurance', 'off')
+    bed = request.args.get('bed', 'off')
+    baggage = request.args.get('baggage', 'off')
 
-    if request.method == 'POST':
-        user = request.form.get('user')
-        age = request.form.get('age')
-        sex = request.form.get('sex')
-        place = request.form.get('place')
-        departure = request.form.get('departure')
-        arrival = request.form.get('arrival')
-        date = request.form.get('date')
-        insurance = request.form.get('insurance')
-        bed = request.form.get('bed')
-        baggage = request.form.get('baggage')
-
-        
+    if 'submit' in request.args:
         if not user:
             errors['user'] = 'Заполните поле!'
         
@@ -131,12 +119,10 @@ def railway():
             errors['date'] = 'Выберите дату!'
 
         if not errors:
-            
             return redirect(url_for('lab3.payrail', user=user, age=age, sex=sex, place=place, 
                                     departure=departure, arrival=arrival, date=date, 
-                                    insurance='on' if insurance else 'off', bed='on' if bed else 'off', baggage='on' if baggage else 'off' ))
+                                    insurance=insurance, bed=bed, baggage=baggage))
 
-    
     return render_template(
         'lab3/railway.html', 
         user=user, age=age, sex=sex, place=place,
@@ -154,14 +140,11 @@ def payrail():
     bed = request.args.get('bed') == 'on'
     baggage = request.args.get('baggage') == 'on'
 
-    
     price = 1000 if age >= 18 else 700
 
-    # Доплата за полку 
     if place in ['leftdawn', 'rightdawn']:
         price += 100
 
-    # Доплата за страховку
     if insurance:
         price += 150
     if bed:
