@@ -1,0 +1,14 @@
+{% extends "base.html"%}
+
+{# Номер лаб. работы: #}
+{%block lab%} Лабораторная работа 4{%endblock%}
+
+{# Основная часть: #}
+{% block main %}
+    <h1>Умножение чисел</h1>
+    <form action="/lab4/multi" method="post">
+        <input type="number" name="x1" placeholder="Число 1"> x
+        <input type="number" name="x2" placeholder="Число 2">
+        <input type="submit" value="=">
+    </form>
+{% endblock %}
