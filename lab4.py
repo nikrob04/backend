@@ -18,7 +18,7 @@ def div():
     if x1 == '' or x2 == '':
         return render_template('lab4/div.html', error='Оба поля должны быть заполнены!')
     
-    try:
+    else:
         x1 = int(x1)
         x2 = int(x2)
         if x2 == 0:
@@ -26,3 +26,84 @@ def div():
         
         result = x1 / x2
         return render_template('lab4/div.html', x1=x1, x2=x2, result=result)
+
+@lab4.route('/lab4/sum-form')
+def sum_form():
+    return render_template('lab4/sum-form.html')
+
+@lab4.route('/lab4/sum', methods=['POST'])
+def summ():
+    x1 = request.form.get('x1')
+    x2 = request.form.get('x2')
+    
+    if x1 == '':
+        x1 = 0
+    if x2 == '':
+        x2 = 0
+
+    x1 = int(x1)
+    x2 = int(x2)
+    result = x1 + x2  
+    return render_template('lab4/sum.html', x1=x1, x2=x2, result=result)
+        
+@lab4.route('/lab4/multi-form')
+def multi_form():
+    return render_template('lab4/multi-form.html')
+
+@lab4.route('/lab4/multi', methods=['POST'])
+def multi():
+    x1 = request.form.get('x1')
+    x2 = request.form.get('x2')
+    
+    if x1 == '':
+        x1 = 1
+    if x2 == '':
+        x2 = 1
+
+    x1 = int(x1)
+    x2 = int(x2)
+    result = x1 * x2
+    return render_template('lab4/multi.html', x1=x1, x2=x2, result=result)
+
+@lab4.route('/lab4/sub-form')
+def sub_form():
+    return render_template('lab4/sub-form.html')
+
+@lab4.route('/lab4/sub', methods=['POST'])
+def sub():
+    x1 = request.form.get('x1')
+    x2 = request.form.get('x2')
+    
+    if x1 == '' or x2 == '':
+        return render_template('lab4/sub.html', error='Оба поля должны быть заполнены!')
+    
+    else:
+        x1 = int(x1)
+        x2 = int(x2)
+
+    x1 = int(x1)
+    x2 = int(x2)
+    result = x1 - x2
+    return render_template('lab4/sub.html', x1=x1, x2=x2, result=result)
+
+@lab4.route('/lab4/power-form')
+def power_form():
+    return render_template('lab4/power-form.html')
+
+@lab4.route('/lab4/power', methods=['POST'])
+def power():
+    x1 = request.form.get('x1')
+    x2 = request.form.get('x2')
+    
+    if x1 == '' or x2 == '':
+        return render_template('lab4/power.html', error='Оба поля должны быть заполнены!')
+    if x1 == '0' and x2 == '0':
+        return render_template('lab4/power.html', error='Оба числа не должны быть равны нулю!')
+    else:
+        x1 = int(x1)
+        x2 = int(x2)
+
+    x1 = int(x1)
+    x2 = int(x2)
+    result = x1 ** x2
+    return render_template('lab4/power.html', x1=x1, x2=x2, result=result)

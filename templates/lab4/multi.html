@@ -1,0 +1,13 @@
+{% extends "base.html"%}
+
+{# Номер лаб. работы: #}
+{%block lab%} Лабораторная работа 4 {%endblock%}
+
+{# Основная часть: #}
+{% block main %}
+    <h1>Умножение чисел</h1>
+    <form action="/lab4/multi" method="post">
+        <p>{{ x1 }} + {{ x2 }} = {{ result }}</p>
+        <a href="/lab4/multi-form">Вернуться к форме</a>
+    </form>
+{% endblock %}

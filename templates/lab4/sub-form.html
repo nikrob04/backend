@@ -1,13 +1,13 @@
 {% extends "base.html"%}
 
 {# Номер лаб. работы: #}
-{%block lab%} Лабораторная работа №4 {%endblock%}
+{%block lab%} Вычетание чисел {%endblock%}
 
 {# Основная часть: #}
 {% block main %}
-    <h1>Деление чисел</h1>
-    <form action="/lab4/div" method="post">
-        <input type="number" name="x1" placeholder="Число 1"> / 
+    <h1>Вычетание чисел</h1>
+    <form action="/lab4/sub" method="post">
+        <input type="number" name="x1" placeholder="Число 1"> -
         <input type="number" name="x2" placeholder="Число 2">
         <input type="submit" value="=">
     </form>

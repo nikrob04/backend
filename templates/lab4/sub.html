@@ -5,13 +5,13 @@
 
 {# Основная часть: #}
 {% block main %}
-    <h1>Деление чисел</h1>
-    <form action="/lab4/div" method="post">
+    <h1>Вычетание чисел</h1>
+    <form action="/lab4/sub" method="post">
         {% if error %}
             <p style="color: red;">{{ error }}</p>
         {% else %}
-            <p>{{ x1 }} / {{ x2 }} = {{ result }}</p>
+            <p>{{ x1 }} - {{ x2 }} = {{ result }}</p>
         {% endif %}
-        <a href="/lab4/div-form">Вернуться к форме</a>
+        <a href="/lab4/sub-form">Вернуться к форме</a>
     </form>
 {% endblock %}
