@@ -107,3 +107,20 @@ def power():
     x2 = int(x2)
     result = x1 ** x2
     return render_template('lab4/power.html', x1=x1, x2=x2, result=result)
+
+tree_count = 0
+
+@lab4.route('/lab4/tree', methods = ['POST', 'GET'])
+def tree():
+    global tree_count
+    if request.method == 'GET':
+        return render_template('lab4/tree.html', tree_count=tree_count)
+
+    operation = request.form.get('operation')
+
+    if operation == 'cut':
+        tree_count -= 1
+    elif operation == 'plant':
+        tree_count += 1
+    
+    return render_template('lab4/tree.html', tree_count=tree_count)
