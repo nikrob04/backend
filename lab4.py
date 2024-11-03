@@ -125,3 +125,17 @@ def tree():
     if request.method == 'GET':
         return render_template('lab4/tree.html', tree_count=tree_count)
     return redirect('/lab4/tree')
+
+@lab4.route('/lab4/login', methods = ['POST', 'GET'])
+def login():
+    if request.method == 'GET':
+        return render_template('lab4/login.html', authorized=False)
+
+    login = request.form.get('login')
+    password = request.form.get('password')
+     
+    if login == 'alex' and password == '123':
+        return render_template('lab4/login.html', login=login, authorized = True)
+    
+    error = 'Неверное имя пользователя или пароль'
+    return render_template('lab4/login.html', error=error, authorized=False)

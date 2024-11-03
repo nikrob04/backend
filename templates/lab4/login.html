@@ -1,0 +1,32 @@
+
+{% extends "base.html"%}
+
+{# Номер лаб. работы: #}
+{%block lab%} Лабораторная работа 4 {%endblock%}
+
+{# Основная часть: #}
+{% block main %}
+    {% if authorized %}
+            <h1> Добро пожаловать, {{ login}}!</h1>
+    {% else %}
+        <h1>Авторизация</h1>
+        <h2>введите логин и пароль</h2>
+        <form method="post">
+            
+            <div>
+                <label for="login">Логин:</label>
+                <input type="text" name="login" id="login">
+            </div>
+            <div>
+                <label for="password">Пароль:</label>
+                <input type="text" name="password" id="password">
+            </div>
+            <div>{{error}}</div>
+            <div>
+                <button type="submit" style="border-radius: 10%;">Войти</button>
+                <button type="reset" style="border-radius: 10%;">Отмена</button>
+            </div>
+        </form>
+    {%endif%}
+    
+{% endblock %}
