@@ -128,10 +128,10 @@ def tree():
 
 
 users = [
-    {'login' : 'alex', 'password': '123'},
-    {'login': 'bob', 'password': 'qwerty'},
-    {'login': 'rob', 'password': '321'},
-    {'login': 'lia', 'password': 'qqq'}
+    {'login' : 'alex', 'password': '123', 'name' : 'Алексей Алексеевич'},
+    {'login': 'bob', 'password': 'qwerty', 'name' : 'Никита Романенко'},
+    {'login': 'rob', 'password': '321', 'name' : 'Роб Старк'},
+    {'login': 'lia', 'password': 'qqq', 'name' : 'Илья Мэдисон'}
 ]
 @lab4.route('/lab4/login', methods = ['POST', 'GET'])
 def login():
@@ -139,22 +139,29 @@ def login():
         if 'login' in session:
             authorized = True
             login = session['login']
+            name = session.get('name', '')
         else:
             authorized = False
             login =''
-        return render_template('lab4/login.html', authorized=authorized, login = login)
+            name = ''
+        return render_template('lab4/login.html', authorized=authorized, login = login, name = name)
 
     login = request.form.get('login')
     password = request.form.get('password')
     
+    if login == '' or password == '':
+        error = 'Поля должны быть заполнены'
+        return render_template('lab4/login.html', login=login, authorized = False, error = error)
+
     for user in users:
         if login == user['login'] and password == user['password']:
             session['login'] = login
+            session['name'] = user['name']
             return redirect('/lab4/login')
-            #return render_template('lab4/login.html', login=login, authorized = True)
+            
     
     error = 'Неверное имя пользователя или пароль'
-
+    return render_template('lab4/login.html', login=login, authorized = False, error = error)
 
 @lab4.route('/lab4/logout', methods = ['POST'])
 def logout():
