@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block lab %} Лабораторная работа №4 {% endblock %}
+
+{% block main %}
+    <h1>Холодильник</h1>
+    <div>
+        Температура: <div style="background-color: black; width: 140px; color: lightgreen; text-align: center; font-family: 'Orbitron'; font-size: 50px">{{ temperature }}&#176;C</div>
+    </div>
+    <form method="post">
+        <input type="number" name="temperature" id="temperature" placeholder="Введите температуру" style="width: 100px;">
+        <button type="submit" value="ВВОД">[=]</button>
+    </form>
+
+    {% if error %}
+    <div style="color: red;">
+        {{ error }}
+    </div>
+    {% endif %}
+
+    {% if message %}
+    <div style="color: green;">
+        {{ message }}
+    </div>
+    <div style="background-color: rgb(101, 83, 83); width: 130px">
+        {% for _ in range(snowflakes_count) %}
+        <img src="{{ url_for('static', filename='lab4/snow.png') }}" alt="snowflake" width="40">
+        {% endfor %}
+    </div>
+    {% endif %}
+{% endblock %}
