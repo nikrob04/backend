@@ -204,3 +204,54 @@ def frige():
         message = f"Установлена температура: {temperature}°С"
 
     return render_template('lab4/frige.html', temperature=temperature, message=message, snowflakes_count=snowflakes_count)
+
+
+@lab4.route('/lab4/order-grain', methods = ['POST', 'GET'])
+def order_grain():
+    if request.method == 'GET':
+        return render_template('lab4/order-grain.html', ordered=False)
+    
+    grain = request.form.get('grain')
+    count = request.form.get('count')
+    if grain == '' or count == '':
+        error = 'Введите данные'
+        return render_template('lab4/order-grain.html', error=error, ordered=False)
+    
+    count = int(count)
+
+    if count > 500:
+        error = 'Такого объема сейчас нет в наличии'
+        return render_template('lab4/order-grain.html', error=error, ordered=False)
+    if count <= 0:
+        error = 'Введите правильный вес'
+        return render_template('lab4/order-grain.html', error=error, ordered=False)
+    
+    grain_names = {
+        'barley': 'Ячмень',
+        'oat': 'Овес',
+        'wheat': 'Пшеница',
+        'rye': 'Рожь'
+    }
+
+    if grain == 'barley':
+        price = 12345
+    elif grain == 'oat':
+        price = 8522
+    elif grain == 'wheat':
+        price = 8722
+    elif grain == 'rye':
+        price = 14111
+
+    if count > 50:
+        dis = (price*count)*0.10
+        con = price*count-dis
+    else:
+        dis = 0
+        con = price*count
+
+    return render_template ('lab4/order-grain.html', con = con, dis= dis, ordered=True, count=count, grain=grain_names.get(grain, grain))
+
+
+    
+
+    

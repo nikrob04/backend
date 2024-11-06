@@ -1,0 +1,62 @@
+{% extends "base.html"%}
+
+{# Номер лаб. работы: #}
+{%block lab%} Лабораторная работа №4 {%endblock%}
+
+{# Основная часть: #}
+{%block main%}
+    {% if ordered%}
+        <h1>Заказ сформирован</h1>
+        <div>
+            Состав заказа: <br>
+            {{grain}} <br>
+            {{count}}т <br>
+            Скидка: {{dis}}
+            Итог:
+            {{con}}
+        </div>
+
+    {% else %}
+        <h1>Заказ зерна</h1>
+        <form method="post">
+            <div>
+                <label class="grain">
+                    <input type="radio" value="barley" name="grain">
+                    <span class="grain">Ячмень</span>
+                    <div class="price">12 345 руб/т</div>
+                </label>
+            </div>
+            
+            <div>
+                <label class="grain">
+                    <input type="radio" value="oat" name="grain">
+                    <span class="grain">Овес</span>
+                    <div class="price">8 522 руб/т</div>
+                </label>
+            </div>
+            
+            <div>
+                <label class="grain">
+                    <input type="radio" value="wheat" name="grain">
+                    <span class="grain">Пшеница</span>
+                    <div class="price">8 722 руб/т</div>
+                </label>
+            </div>
+
+            <div>
+                <label class="grain">
+                    <input type="radio" value="rye" name="grain">
+                    <span class="grain">Рожь</span>
+                    <div class="price">14 111 руб/т</div>
+                </label>
+            </div>
+
+            <div>
+                <input type="number"  name="count" id="count" placeholder="Кол. тонн" style="width: 120px;">
+            </div>
+            <button type="submit">ГОТОВО</button>
+            <div>{{error}} {{con}}</div>
+
+        </form>
+    {% endif %}
+{%endblock%}
