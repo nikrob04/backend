@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block lab %} Лабораторная работа №4 {% endblock %}
+
+{% block main %}
+<h1>База знаний</h1>
+<div style="text-align: center;">Anonymous</div>
+<div style="display: flex; gap: 20px; margin-top: 20px; justify-content: center;">
+    
+    <form action="{{ url_for('lab5.login') }}" method="get">
+        <button type="submit" class="btn">Вход</button>
+    </form>
+    <form action="{{ url_for('lab5.register') }}" method="get">
+        <button type="submit" class="btn">Регистрация</button>
+    </form>
+    <form action="{{ url_for('lab5.list') }}" method="get">
+        <button type="submit" class="btn">Список</button>
+    </form>
+    <form action="{{ url_for('lab5.create') }}" method="get">
+        <button type="submit" class="btn">Создать</button>
+    </form>
+</div>
+{% endblock %}
+

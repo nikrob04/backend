@@ -107,3 +107,23 @@ label.drink-option, label.addon-option {
     font-size: 14px;
     color: gray;
 }
+
+.btn {
+    padding: 20px 40px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+.btn:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+}
+.btn:active {
+    transform: scale(0.95);
+}
