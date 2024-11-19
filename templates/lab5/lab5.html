@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block lab %} Лабораторная работа №4 {% endblock %}
+{% block lab %} Лабораторная работа №5 {% endblock %}
 
 {% block main %}
 <h1>База знаний</h1>
@@ -10,7 +10,7 @@
     <form action="{{ url_for('lab5.login') }}" method="get">
         <button type="submit" class="btn">Вход</button>
     </form>
-    <form action="{{ url_for('lab5.register') }}" method="get">
+    <form action="/lab5/register" method="get">
         <button type="submit" class="btn">Регистрация</button>
     </form>
     <form action="{{ url_for('lab5.list') }}" method="get">

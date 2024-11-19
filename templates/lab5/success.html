@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block lab %} Лабораторная работа №5 {% endblock %}
+
+{% block main %}
+<h1>Регистрация прошла успешно</h1>
+
+<div style="display: flex; gap: 20px; margin-top: 20px; justify-content: center;">
+   
+    <form action="/lab5/" method="get">
+        <div style="text-align: center;"><b>Привет {{login}}</b></div>
+        <button type="submit" class="btn">Вернуться<br> на главную</button>
+    </form>
+</div>
+{% endblock %}
+
