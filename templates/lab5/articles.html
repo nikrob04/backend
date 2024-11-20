@@ -7,8 +7,14 @@
     <h1>Создание статьи</h1>
 
     {% for article in articles %}
-        <h2>{{article['title']}}</h2>
-        <blockquote>{{ article['article_text'] }}</blockquote>
-    {% endfor %}
+    <h2>{{ article['title'] }}</h2>
+    <blockquote>{{ article['article_text'] }}</blockquote>
+    <a href="/lab5/edit/{{ article['id'] }}">Редактировать</a>
+    <form action="/lab5/delete/{{ article['id'] }}" method="post" style="display:inline;">
+        <button type="submit" onclick="return confirm('Вы уверены, что хотите удалить эту статью?');">Удалить</button>
+    </form>
+    <a href="/lab5/">На главную</a>
+{% endfor %}
+
 {% endblock %}
 

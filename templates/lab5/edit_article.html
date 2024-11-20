@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block lab %} Лабораторная работа №5 {% endblock %}
+
+{% block main %}
+<h1>Редактирование статьи</h1>
+<form action="/lab5/edit/{{ article['id'] }}" method="post">
+    <label for="title">Заголовок:</label><br>
+    <input type="text" id="title" name="title" value="{{ article['title'] }}" required><br><br>
+    
+    <label for="article_text">Текст статьи:</label><br>
+    <textarea style="height: 300px; width: 70% " id="article_text" name="article_text" rows="10" required>{{ article['article_text'] }}</textarea><br><br>
+    
+    <button type="submit">Сохранить</button>
+</form>
+<a href="/lab5/list">Назад</a>
+{% endblock %}

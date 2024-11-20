@@ -133,6 +133,10 @@ def create():
     title = request.form.get('title')
     article_text = request.form.get('article_text')
 
+    if not (title or article_text):
+        return render_template('lab5/create.html', error = 'Заполните поля!')
+
+
     conn, cur = db_connect()
 
     if current_app.config['DB_TYPE'] == 'postgres':
@@ -148,3 +152,61 @@ def create():
     
     db_close(conn, cur)
     return redirect('/lab5')
+
+@lab5.route('/lab5/logout', methods=['GET', 'POST'])
+def logout():
+    session.clear()  
+    return redirect('/lab5/')  
+
+@lab5.route('/lab5/edit/<int:article_id>', methods=['GET', 'POST'])
+def edit_article(article_id):
+    login = session.get('login')
+    if not login:
+        return redirect('/lab5/login')
+    
+    conn, cur = db_connect()
+
+    if request.method == 'POST':
+        title = request.form['title']
+        article_text = request.form['article_text']
+
+        if current_app.config['DB_TYPE'] == 'postgres':
+            cur.execute(
+                "UPDATE articles SET title=%s, article_text=%s WHERE id=%s;",
+                (title, article_text, article_id)
+            )
+        else:
+            cur.execute(
+                "UPDATE articles SET title=?, article_text=? WHERE id=?;",
+                (title, article_text, article_id)
+            )
+        conn.commit()
+        db_close(conn, cur)
+        return redirect('/lab5/list')
+
+    if current_app.config['DB_TYPE'] == 'postgres':
+        cur.execute("SELECT * FROM articles WHERE id=%s;", (article_id,))
+    else:
+        cur.execute("SELECT * FROM articles WHERE id=?;", (article_id,))
+    article = cur.fetchone()
+    
+    db_close(conn, cur)
+    return render_template('/lab5/edit_article.html', article=article)
+
+@lab5.route('/lab5/delete/<int:article_id>', methods=['POST'])
+def delete_article(article_id):
+    login = session.get('login')
+    if not login:
+        return redirect('/lab5/login')
+    
+    conn, cur = db_connect()
+
+    if current_app.config['DB_TYPE'] == 'postgres':
+        cur.execute("DELETE FROM articles WHERE id=%s;", (article_id,))
+    else:
+        cur.execute("DELETE FROM articles WHERE id=?;", (article_id,))
+    conn.commit()
+    db_close(conn, cur)
+    return redirect('/lab5/list')
+
+
