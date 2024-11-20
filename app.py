@@ -61,6 +61,7 @@ def zero():
                         <li><a href="/lab2">Лабораторная 2</a></li>
                         <li><a href="/lab3">Лабораторная 3</a></li>
                         <li><a href="/lab4">Лабораторная 4</a></li>
+                        <li><a href="/lab5">Лабораторная 5</a></li>
                     <ul>
                 </main>
                 <footer>
