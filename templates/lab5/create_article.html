@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block lab %} Лабораторная работа №5 {% endblock %}
+
+{% block main %}
+<h1>База знаний</h1>
+    <h1>Создание статьи</h1>
+
+    <form method="post">
+        <div>
+            <label>
+                Название статьи:
+                <input type="text" maxlength="50", name="title">
+            </label>
+        </div>
+
+        <div>
+            . <br>
+            <textarea name="article_text" style="height: 500px; width: 70% "></textarea>
+        </div>
+
+        <div>
+            <button type="submit" class="btn">Создать</button>
+        </div>
+    </form>
+{% endblock %}
+

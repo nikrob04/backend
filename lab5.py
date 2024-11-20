@@ -79,6 +79,24 @@ def register():
 def list():
     return "List Page"  # Добавьте логику
 
-@lab5.route('/lab5/create')
+@lab5.route('/lab5/create', methods=['GET', 'POST'])
 def create():
-    return "Create Page"  # Добавьте логику
+    login = session.get('login')
+    if not login:
+        return redirect('/lab5/login')
+    
+    if request.method == 'GET':
+        return render_template('lab5/create_article.html')
+    
+    title = request.form.get('title')
+    article_text = request.form.get('article_text')
+
+    conn, cur = db_connect()
+
+    cur.execute("SELECT * FROM users WHERE login=%s;", (login, ))
+    login_id = cur.fetchone()["id"]
+
+    cur.execute("INSERT INTO articles(login_id, title, article_text) VALUES (%s, %s, %s);", (login_id, title, article_text))
+    
+    db_close(conn, cur)
+    return redirect('/lab5')
