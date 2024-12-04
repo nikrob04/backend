@@ -7,33 +7,43 @@
         const json = {
             'jsonrpc': '2.0',
             'method': 'info',
-            'id': Math.round(Math.random()*1000)
+            'id': Math.round(Math.random() * 1000)
         };
         fetch(url, {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(json)
         })
-        .then(function(response) {
-            return response.json()
-        })
-        .then(function(data) {
+        .then(response => response.json())
+        .then(data => {
             const office_list = data.result;
             const ul = document.getElementById('office-list');
-            for( let i = 0; i < office_list.length; i++) {
+            ul.innerHTML = ''; // Очищаем список перед рендерингом
+            for (let i = 0; i < office_list.length; i++) {
                 const office = office_list[i];
                 const li = document.createElement('li');
                 li.innerText = `${office.number}: ${office.tenant || 'Свободен'}`;
 
-                const bookingButton = document.createElement('button');
-                bookingButton.innerText = 'Зарезервировать';
-                bookingButton.onclick = function() {booking(office.number)};
-                li.appendChild(bookingButton);
-
+                if (office.tenant === '') {
+                    // Кнопка "Зарезервировать", если офис свободен
+                    const bookingButton = document.createElement('button');
+                    bookingButton.innerText = 'Зарезервировать';
+                    bookingButton.onclick = function() {
+                        booking(office.number);
+                    };
+                    li.appendChild(bookingButton);
+                } else if (office.tenant === sessionStorage.getItem('user')) {
+                    // Кнопка "Освободить", если офис занят текущим пользователем
+                    const cancelButton = document.createElement('button');
+                    cancelButton.innerText = 'Освободить';
+                    cancelButton.onclick = function() {
+                        cancellation(office.number);
+                    };
+                    li.appendChild(cancelButton);
+                }
                 ul.appendChild(li);
             }
         });
-    
     }
 
     function booking(officeNumber) {
@@ -42,21 +52,19 @@
             'jsonrpc': '2.0',
             'method': 'booking',
             'params': officeNumber,
-            'id': Math.round(Math.random()*1000)
+            'id': Math.round(Math.random() * 1000)
         };
         fetch(url, {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'}, 
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(json)
         })
-        .then (function (response) {
-            return response.json()
-        })
-        .then (function(data) {
+        .then(response => response.json())
+        .then(data => {
             if (data.error) {
-                switch(data.error.code) {
+                switch (data.error.code) {
                     case 1:
-                        alert('Вы не авторизированы, авторизуйтесь');
+                        alert('Вы не авторизованы, авторизуйтесь');
                         break;
                     case 2:
                         alert('Офис уже арендуется');
@@ -65,25 +73,72 @@
                         alert('Странная ошибка');
                         break;
                 }
-                
-            }
-            else {
+            } else {
                 document.getElementById('office-list').innerHTML = '';
                 getOfficelist();
             }
-            
         });
     }
+
+    function cancellation(officeNumber) {
+        const url = '/lab6/json-rpc-api';
+        const json = {
+            'jsonrpc': '2.0',
+            'method': 'cancellation',
+            'params': officeNumber,
+            'id': Math.round(Math.random() * 1000)
+        };
+        fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(json)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                switch (data.error.code) {
+                    case 1:
+                        alert('Вы не авторизованы, авторизуйтесь');
+                        break;
+                    case 3:
+                        alert('Офис не арендован');
+                        break;
+                    case 4:
+                        alert('Вы не можете освободить чужой офис');
+                        break;
+                    default:
+                        alert('Неизвестная ошибка');
+                }
+            } else {
+                document.getElementById('office-list').innerHTML = '';
+                getOfficelist();
+            }
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
-        getOfficelist();
+        
+        fetch('/current-user', {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.user) {
+                sessionStorage.setItem('user', data.user); 
+                getOfficelist();
+            } else {
+                alert('Пожалуйста, авторизуйтесь.');
+                window.location.href = '/lab5/login';
+            }
+        });
     });
 </script>
 {% endblock %}
-
 
 {% block lab %} Лабораторная работа №6 {% endblock %}
 
 {% block main %}
     <h1>Список кабинетов</h1>
     <ul id="office-list"></ul>
-{%endblock%}
+{% endblock %}
