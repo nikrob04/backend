@@ -18,11 +18,14 @@
         .then(data => {
             const office_list = data.result;
             const ul = document.getElementById('office-list');
+            const totalPriceElement = document.getElementById('total-price');
             ul.innerHTML = ''; // Очищаем список перед рендерингом
+            let totalPrice = 0;
+
             for (let i = 0; i < office_list.length; i++) {
                 const office = office_list[i];
                 const li = document.createElement('li');
-                li.innerText = `${office.number}: ${office.tenant || 'Свободен'}`;
+                li.innerText = `Кабинет ${office.number}: ${office.tenant || 'Свободен'}, Цена: ${office.price} руб.`;
 
                 if (office.tenant === '') {
                     // Кнопка "Зарезервировать", если офис свободен
@@ -41,8 +44,16 @@
                     };
                     li.appendChild(cancelButton);
                 }
+
                 ul.appendChild(li);
+
+                // Считаем общую стоимость арендованных офисов
+                if (office.tenant !== '' && office.tenant === sessionStorage.getItem('user')) {
+                    totalPrice += office.price;
+                }
             }
+
+            totalPriceElement.innerText = `Общая стоимость арендованных офисов: ${totalPrice} руб.`;
         });
     }
 
@@ -74,7 +85,6 @@
                         break;
                 }
             } else {
-                document.getElementById('office-list').innerHTML = '';
                 getOfficelist();
             }
         });
@@ -110,14 +120,12 @@
                         alert('Неизвестная ошибка');
                 }
             } else {
-                document.getElementById('office-list').innerHTML = '';
                 getOfficelist();
             }
         });
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        
         fetch('/current-user', {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
@@ -125,7 +133,7 @@
         .then(response => response.json())
         .then(data => {
             if (data.user) {
-                sessionStorage.setItem('user', data.user); 
+                sessionStorage.setItem('user', data.user); // Сохраняем пользователя
                 getOfficelist();
             } else {
                 alert('Пожалуйста, авторизуйтесь.');
@@ -141,4 +149,5 @@
 {% block main %}
     <h1>Список кабинетов</h1>
     <ul id="office-list"></ul>
+    <p id="total-price">Общая стоимость арендованных офисов: 0 руб.</p>
 {% endblock %}
