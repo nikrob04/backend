@@ -71,14 +71,18 @@ def del_film(id):
     else:
         return 'Такого фильма нет', 404
     
-@lab7.route('/lab7/rest-api/films/<int:id>', methods = ['PUT']),
+@lab7.route('/lab7/rest-api/films/<int:id>', methods = ['PUT'])
 def put_film(id):
     if id <= len(films)-1:
         film = request.get_json()
         films[id] = film
         return films[id]
     else:
-        return 'Такого фильма нет', 404
-    
+        return 'Такого фильма нет', 404  
 
+@lab7.route('/lab7/rest-api/films/', methods = ['POST'])
+def add_film():
+    film = request.get_json()
+    films.append(film)
+    return jsonify({'id': len(films) - 1}), 201
 
