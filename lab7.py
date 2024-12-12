@@ -65,8 +65,20 @@ def get_film(id):
         return 'Такого фильма нет', 404
 @lab7.route('/lab7/rest-api/films/<int:id>', methods = ['DELETE'])
 def del_film(id):
-    if ia <= len(films)-1:
+    if id <= len(films)-1:
         del films[id]
         return '', 204
     else:
         return 'Такого фильма нет', 404
+    
+@lab7.route('/lab7/rest-api/films/<int:id>', methods = ['PUT']),
+def put_film(id):
+    if id <= len(films)-1:
+        film = request.get_json()
+        films[id] = film
+        return films[id]
+    else:
+        return 'Такого фильма нет', 404
+    
+
+
