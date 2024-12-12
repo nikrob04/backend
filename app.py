@@ -5,6 +5,7 @@ from lab3 import lab3
 from lab4 import lab4
 from lab5 import lab5
 from lab6 import lab6
+from lab7 import lab7
 import os
 app = Flask (__name__)
 
@@ -18,6 +19,7 @@ app.register_blueprint(lab3)
 app.register_blueprint(lab4)
 app.register_blueprint(lab5)
 app.register_blueprint(lab6)
+app.register_blueprint(lab7)
 
 @app.route("/")
 def zero():
@@ -68,6 +70,7 @@ def zero():
                         <li><a href="/lab4">Лабораторная 4</a></li>
                         <li><a href="/lab5">Лабораторная 5</a></li>
                         <li><a href="/lab6">Лабораторная 6</a></li>
+                        <li><a href="/lab6">Лабораторная 7</a></li>
                     <ul>
                 </main>
                 <footer>
