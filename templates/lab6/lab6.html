@@ -25,25 +25,22 @@
             for (let i = 0; i < office_list.length; i++) {
                 const office = office_list[i];
                 const li = document.createElement('li');
-                li.innerText = `Кабинет ${office.number}: ${office.tenant || 'Свободен'}, Цена: ${office.price} руб.`;
-
-                if (office.tenant === '') {
-                    // Кнопка "Зарезервировать", если офис свободен
-                    const bookingButton = document.createElement('button');
-                    bookingButton.innerText = 'Зарезервировать';
-                    bookingButton.onclick = function() {
-                        booking(office.number);
-                    };
-                    li.appendChild(bookingButton);
-                } else if (office.tenant === sessionStorage.getItem('user')) {
-                    // Кнопка "Освободить", если офис занят текущим пользователем
-                    const cancelButton = document.createElement('button');
-                    cancelButton.innerText = 'Освободить';
-                    cancelButton.onclick = function() {
+                li.className = 'office-item';
+                li.innerHTML = `
+                    <span>Кабинет ${office.number}: ${office.tenant || 'Свободен'}, Цена: ${office.price} руб.</span>
+                    <button class="action-button">
+                        ${office.tenant === sessionStorage.getItem('user') ? 'Снять аренду' : 'Зарезервировать'}
+                    </button>
+                `;
+                
+                const button = li.querySelector('.action-button');
+                button.onclick = function () {
+                    if (office.tenant === sessionStorage.getItem('user')) {
                         cancellation(office.number);
-                    };
-                    li.appendChild(cancelButton);
-                }
+                    } else {
+                        booking(office.number);
+                    }
+                };
 
                 ul.appendChild(li);
 
@@ -148,6 +145,6 @@
 
 {% block main %}
     <h1>Список кабинетов</h1>
-    <ul id="office-list"></ul>
-    <p id="total-price">Общая стоимость арендованных офисов: 0 руб.</p>
+    <ul id="office-list" class="office-list"></ul>
+    <p id="total-price" class="total-price">Общая стоимость арендованных офисов: 0 руб.</p>
 {% endblock %}

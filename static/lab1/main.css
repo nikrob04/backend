@@ -127,3 +127,40 @@ label.drink-option, label.addon-option {
 .btn:active {
     transform: scale(0.95);
 }
+
+.office-list {
+    list-style: none;
+    padding: 0;
+}
+
+.office-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.action-button {
+    background-color: #007BFF; /* Голубой цвет */
+    color: white;
+    border: none;
+    border-radius: 8px; /* Скругленные углы */
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+    width: 150px; /* Фиксированная ширина */
+    text-align: center;
+}
+
+.action-button:hover {
+    background-color: #0056b3; /* Более тёмный голубой при наведении */
+}
+
+.total-price {
+    font-weight: bold;
+    margin-top: 20px;
+}
