@@ -62,5 +62,11 @@ def get_film(id):
     if id <= len(films)-1:
         return films[id] 
     else:
-        return redirect('/lab0')
-    
+        return 'Такого фильма нет', 404
+@lab7.route('/lab7/rest-api/films/<int:id>', methods = ['DELETE'])
+def del_film(id):
+    if ia <= len(films)-1:
+        del films[id]
+        return '', 204
+    else:
+        return 'Такого фильма нет', 404
