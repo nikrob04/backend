@@ -80,9 +80,9 @@ def put_film(id):
     else:
         return 'Такого фильма нет', 404  
 
-@lab7.route('/lab7/rest-api/films/', methods = ['POST'])
+@lab7.route('/lab7/rest-api/films/', methods=['POST'])
 def add_film():
     film = request.get_json()
     films.append(film)
-    return jsonify({'id': len(films) - 1}), 201
+    return jsonify({"id": len(films) - 1}), 201
 
