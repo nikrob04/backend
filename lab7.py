@@ -85,8 +85,11 @@ def put_film(id):
 @lab7.route('/lab7/rest-api/films/', methods=['POST'])
 def add_film():
     film = request.get_json()
-    if not film.get('description'):  
+    if not film.get('description'):
         return {'description': 'Описание фильма не может быть пустым!'}, 400
+    if not film.get('title') and film.get('title_ru'): 
+        film['title'] = film['title_ru']  
     films.append(film)
     return jsonify({"id": len(films) - 1}), 201
+
 
