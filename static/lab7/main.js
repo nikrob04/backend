@@ -19,6 +19,9 @@ function fillFilmList() {
 
                 let editButton = document.createElement('button');
                 editButton.innerText = 'редактировать';
+                editButton.onclick = function() {
+                    editFilm(i);
+                }
 
                 let delButton = document.createElement('button');
                 delButton.innerText = 'удалить';
@@ -50,6 +53,7 @@ function deleteFilm(id, title) {
 
 function showModal() {
     document.querySelector('div.modal').style.display = 'block';
+    document.getElementById('description-error').innerText = '';
 }
 
 function hideModal() {
@@ -86,21 +90,42 @@ function sendFilm() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(film)
     })
-    .then(response => response.json().then(data => ({ status: response.status, body: data })))
-    .then(obj => {
-        if (obj.status === 200 || obj.status === 201) {
-            fillFilmList();
-            hideModal();
+    .then(response => {
+        if (response.ok) {
+            return response.json(); // Если всё ок, возвращаем JSON
+        } else if (response.status === 400) {
+            return response.json().then(data => { throw data; }); // Если ошибка 400, выбрасываем данные ошибки
         } else {
-            if (obj.body.error) {
-                document.getElementById('description-error').innerText = obj.body.error;
-            }
+            throw { description: 'Произошла ошибка при сохранении данных' };
         }
     })
-    .catch(error => console.error('Error:', error));
+    .then(data => {
+        fillFilmList(); // Успешно обновляем список фильмов
+        hideModal();    // Закрываем модальное окно
+    })
+    .catch(error => {
+        if (error.description) {
+            document.getElementById('description-error').innerText = error.description; // Отображаем описание ошибки
+        } else {
+            console.error('Unexpected error:', error);
+        }
+    });
 }
 
-
+function editFilm(id){
+    fetch(`/lab7/rest-api/films/${id}`)
+    .then(function (data) {
+        return data.json();
+    })
+    .then(function (film){
+        document.getElementById('id').value = id;
+        document.getElementById('title').value = film.title;
+        document.getElementById('title-ru').value = film.title_ru;
+        document.getElementById('year').value = film.year;
+        document.getElementById('description').value = film.description;
+        showModal();
+    })
+}
 
 // Запуск функции заполнения списка фильмов при загрузке страницы
 document.addEventListener('DOMContentLoaded', fillFilmList);

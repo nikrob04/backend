@@ -75,6 +75,8 @@ def del_film(id):
 def put_film(id):
     if id <= len(films)-1:
         film = request.get_json()
+        if film['description'] == '':
+            return {'description': 'Заполните описаение!'}, 400
         films[id] = film
         return films[id]
     else:
@@ -83,6 +85,8 @@ def put_film(id):
 @lab7.route('/lab7/rest-api/films/', methods=['POST'])
 def add_film():
     film = request.get_json()
+    if not film.get('description'):  
+        return {'description': 'Описание фильма не может быть пустым!'}, 400
     films.append(film)
     return jsonify({"id": len(films) - 1}), 201
 
