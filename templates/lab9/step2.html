@@ -5,13 +5,14 @@
 
 {# Основная часть: #}
 {%block main%}
-    <form action="/lab9/", method="post">
+    <form action="/lab9/step2/" method="post">
         <label>
-            Введите ваше имя: <input type="text" name="name">
+            {{name}}Введите ваш возраст: <input type="number" name="age" required>
         </label>
-        <div style="color: red;">{{ error }}</div>
+        <div style="color: red;">{{ error }}</div>  <!-- Вывод ошибок -->
         <div>
             <button type="submit">Подтвердить</button>
         </div>
     </form>
+
 {%endblock%}

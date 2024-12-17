@@ -1,0 +1,20 @@
+{% extends "base1.html" %}
+
+{% block lab %} Лабораторная работа №9 {% endblock %}
+
+{% block main %}
+    <form action="{{ url_for('lab9.step5') }}" method="post">
+        <div>Что тебе больше нравится?</div>
+        {% for value, label in options %}
+            <label>
+                <input type="radio" name="choice" value="{{ value }}"> {{ label }}
+            </label><br>
+        {% endfor %}
+        
+        <div style="color: red;">{{ error }}</div>
+        
+        <div>
+            <button type="submit">Подтвердить</button>
+        </div>
+    </form>
+{% endblock %}

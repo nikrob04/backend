@@ -1,0 +1,22 @@
+{% extends "base1.html" %}
+
+{% block lab %} Лабораторная работа №9 {% endblock %}
+
+{% block main %}
+    <form action="/lab9/step4/" method="post">
+        <div>Что тебе больше нравится?</div>
+        
+        <label>
+            <input type="radio" name="preference" value="tasty"> Что-то вкусное
+        </label>
+        <label>
+            <input type="radio" name="preference" value="beautiful"> Что-то красивое
+        </label>
+        
+        <div style="color: red;">{{ error }}</div>
+        
+        <div>
+            <button type="submit">Подтвердить</button>
+        </div>
+    </form>
+{% endblock %}

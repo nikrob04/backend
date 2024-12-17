@@ -1,0 +1,11 @@
+{% extends "base1.html" %}
+
+{% block lab %} Лабораторная работа №9 {% endblock %}
+
+{% block main %}
+    <div style="font-size: 24px; text-align: center;">
+        <p>{{ greeting }}</p>
+        <p>Поэтому я тебе дарю: <strong>{{ gift }}</strong></p>
+        <img src="{{ image }}" alt="{{ gift }}" style="max-width: 300px; display: block; margin: 0 auto;">
+    </div>
+{% endblock %}

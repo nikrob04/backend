@@ -5,9 +5,13 @@
 
 {# Основная часть: #}
 {%block main%}
-    <form action="/lab9/", method="post">
+    <form action="/lab9/step3/", method="post">
+        <div>Ваш пол:</div>
         <label>
-            Введите ваше имя: <input type="text" name="name">
+            <input type="radio" name="sex" value="male"> Мужской
+        </label>
+        <label>
+            <input type="radio" name="sex" value="female"> Женский
         </label>
         <div style="color: red;">{{ error }}</div>
         <div>
