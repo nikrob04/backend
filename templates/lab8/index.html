@@ -4,7 +4,7 @@
 
 {% block main %}
 <h1>База знаний</h1>
-<div style="text-align: center;">Пользователь: <b>{{ login if login else 'Anonymous' }}</b></div>
+<div style="text-align: center;">Пользователь: <b>{{ username }}</b></div>
 <div style="display: flex; gap: 20px; margin-top: 20px; justify-content: center;">
     
     <form action="/lab8/login" method="get">
@@ -15,9 +15,6 @@
     </form>
     <form action="/lab8/articles" method="get">
         <button type="submit" class="btn">Статьи</button>
-    </form>
-    <form action="/lab8/create" method="get">
-        <button type="submit" class="btn">Создать</button>
     </form>
 </div>
 <div>

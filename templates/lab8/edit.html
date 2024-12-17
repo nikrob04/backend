@@ -3,22 +3,22 @@
 {% block lab %} Лабораторная работа №8 {% endblock %}
 
 {% block main %}
-<h1>Создание статьи</h1>
+<h1>Редактирование статьи</h1>
 
 <!-- Отображаем ошибку, если она есть -->
 {% if error %}
     <div style="color: red;">{{ error }}</div>
 {% endif %}
 
-<!-- Форма для создания статьи -->
+<!-- Форма редактирования статьи -->
 <form method="POST">
     <label for="title">Название статьи:</label>
-    <input type="text" name="title" required><br>
+    <input type="text" name="title" value="{{ article.title }}" required><br>
 
     <label for="article_text">Текст статьи:</label>
-    <textarea name="article_text" required></textarea><br>
+    <textarea name="article_text" required>{{ article.article_text }}</textarea><br>
 
-    <button type="submit">Создать статью</button>
+    <button type="submit">Сохранить изменения</button>
 </form>
 
 <a href="/lab8/articles">Назад к статьям</a>
