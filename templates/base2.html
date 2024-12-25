@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}RGZ{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='rgz.css') }}">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('rgz.main') }}">Главная</a></li>
+                <li><a href="{{ url_for('rgz.movies_list') }}">Фильмы</a></li>
+                <li><a href="{{ url_for('rgz.sessions_list') }}">Сеансы</a></li>
+                {% if session.get('username') %}
+                    <li>Добро пожаловать, {{ session.get('username') }}!</li>
+                    <li><a href="{{ url_for('rgz.logout') }}">Выйти</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('rgz.login') }}">Войти</a></li>
+                    <li><a href="{{ url_for('rgz.register') }}">Регистрация</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Блок для подключения дополнительных скриптов -->
+    {% block scripts %}{% endblock %}
+</body>
+</html>

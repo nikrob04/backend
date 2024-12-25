@@ -1,0 +1,30 @@
+{% extends 'base2.html' %}
+
+{% block title %}Главная страница - Кинотеатр{% endblock %}
+
+{% block content %}
+<!-- Описание кинотеатра -->
+<section>
+    <h1>Добро пожаловать в наш кинотеатр!</h1>
+    <p>Мы рады предложить вам широкий выбор фильмов и удобное бронирование мест в кинотеатре. Наслаждайтесь просмотром!</p>
+    <a href="{{ url_for('rgz.movies_list') }}">Список фильмов</a>
+
+</section>
+
+<!-- Список фильмов -->
+<section>
+    <h2>Список фильмов</h2>
+    <ul>
+        {% for movie in movies %}
+        <li>
+            <h3>{{ movie.title }}</h3>
+            <p><strong>Описание:</strong> {{ movie.description }}</p>
+            <p><a href="{{ url_for('rgz.sessions_list', movie_id=movie.id) }}">Посмотреть сеансы</a></p>
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+
+{% endblock %}
+
+

@@ -1,0 +1,532 @@
+{% extends 'base2.html' %}
+
+{% block title %}Сеансы{% endblock %}
+
+{% block content %}
+<section>
+    <h1>Список сеансов</h1>
+
+    {% if session.get('role') == 'admin' %}
+    <!-- Кнопка добавления сеанса -->
+    <button onclick="openAddSessionModal()">Добавить сеанс</button>
+    {% endif %}
+
+    <table>
+        <thead>
+            <tr>
+                <th>Фильм</th>
+                <th>Дата и время</th>
+                <th>Доступные места</th>
+                <th>Действие</th>
+            </tr>
+        </thead>
+        <tbody id="sessions-list">
+            <!-- Сеансы будут загружены здесь -->
+        </tbody>
+    </table>
+
+    <p id="no-sessions-message" style="display: none;">Сеансы не найдены.</p>
+
+    <!-- Модальное окно бронирования -->
+    <div id="reserve-modal" class="modal" style="display: none;">
+        <h2>Бронирование мест</h2>
+        <p id="selected-session-info"></p>
+        <div id="seat-list" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; max-width: 200px;"></div>
+        <button type="button" class="cancel" onclick="closeReserveModal()">Закрыть</button>
+    </div>
+
+    <!-- Модальное окно добавления сеанса -->
+    <div id="add-session-modal" class="modal" style="display: none;">
+        <h2>Добавить сеанс</h2>
+        <form id="add-session-form">
+            <label>Фильм:</label>
+            <select id="add-session-movie-id" required></select>
+            <label>Дата и время:</label>
+            <input type="datetime-local" id="add-session-datetime" required>
+            <label>Доступные места:</label>
+            <input type="number" id="add-session-seats" required>
+            <button type="button" onclick="addSession()">Сохранить</button>
+            <button type="button" class="cancel" onclick="closeAddSessionModal()">Отмена</button>
+        </form>
+    </div>
+    <div id="edit-session-modal" class="modal" style="display: none;">
+        <h2>Редактировать сеанс</h2>
+        <form id="edit-session-form">
+            <label>Фильм:</label>
+            <select id="edit-session-movie-id" required></select>
+            <label>Дата и время:</label>
+            <input type="datetime-local" id="edit-session-datetime" required>
+            <label>Доступные места:</label>
+            <input type="number" id="edit-session-seats" required>
+            <button type="button" onclick="saveSessionEdit()">Сохранить</button>
+            <button type="button" class="cancel" onclick="closeEditSessionModal()">Отмена</button>
+        </form>
+    </div>
+
+    <!-- Фон для модальных окон -->
+    <div id="modal-overlay" class="modal-overlay" style="display: none;"></div>
+</section>
+
+<script>
+    let currentSessionId = null;
+
+    // Загрузка списка сеансов
+    function loadSessions() {
+        fetch('/rgz/api/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                jsonrpc: '2.0',
+                method: 'get_sessions',
+                params: {},
+                id: 1
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const sessionsList = document.getElementById('sessions-list');
+            const noSessionsMessage = document.getElementById('no-sessions-message');
+    
+            if (data.result && data.result.sessions.length > 0) {
+                const now = new Date();
+                const upcomingSessions = data.result.sessions.filter(session => new Date(session.session_time) > now);
+                const pastSessions = data.result.sessions.filter(session => new Date(session.session_time) <= now);
+    
+                // Сортируем предстоящие сеансы (по возрастанию времени)
+                upcomingSessions.sort((a, b) => new Date(a.session_time) - new Date(b.session_time));
+    
+                // Сортируем завершённые сеансы (по убыванию времени)
+                pastSessions.sort((a, b) => new Date(b.session_time) - new Date(a.session_time));
+    
+                sessionsList.innerHTML = '';
+    
+                // Функция для форматирования времени в "ru" формат
+                function formatDateToRU(dateString) {
+                    const options = {
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        second: '2-digit'
+                    };
+                    return new Date(dateString).toLocaleString('ru-RU', options);
+                }
+    
+                // Добавляем предстоящие сеансы
+                upcomingSessions.forEach(session => {
+                    const row = document.createElement('tr');
+                    const formattedTime = formatDateToRU(session.session_time);
+    
+                    row.innerHTML = `
+                        <td>${session.movie_title}</td>
+                        <td>${formattedTime}</td>
+                        <td>${session.available_seats}</td>
+                        <td>
+                            <button onclick="openReserveModal(${session.id}, '${session.movie_title}')">Зарезервировать</button>
+                            {% if session.get('role') == 'admin' %}
+                            <button onclick="openEditSessionModal(${session.id}, ${session.movie_id}, '${session.session_time}', ${session.available_seats})">Редактировать</button>
+                            <button onclick="deleteSession(${session.id})" class="cancel">Удалить</button>
+                            {% endif %}
+                        </td>
+                    `;
+                    sessionsList.appendChild(row);
+                });
+    
+                // Добавляем завершённые сеансы
+                pastSessions.forEach(session => {
+                    const row = document.createElement('tr');
+                    const formattedTime = formatDateToRU(session.session_time);
+    
+                    row.innerHTML = `
+                        <td>${session.movie_title}</td>
+                        <td>${formattedTime}</td>
+                        <td>${session.available_seats}</td>
+                        <td>Сеанс завершён
+                            {% if session.get('role') == 'admin' %}
+                        <button onclick="openEditSessionModal(${session.id}, ${session.movie_id}, '${session.session_time}', ${session.available_seats})">Редактировать</button>
+                        <button onclick="deleteSession(${session.id})" class="cancel">Удалить</button>
+                        {% endif %}
+                        </td>
+                    `;
+                    sessionsList.appendChild(row);
+                });
+    
+                noSessionsMessage.style.display = 'none';
+            } else {
+                noSessionsMessage.style.display = 'block';
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка загрузки сеансов:', error.message);
+            alert('Произошла ошибка при загрузке сеансов.');
+        });
+    }
+
+    // Открытие модального окна бронирования
+    function openReserveModal(sessionId, movieTitle) {
+        currentSessionId = sessionId;
+        document.getElementById('selected-session-info').textContent = `Сеанс фильма: ${movieTitle}`;
+        loadSeats(sessionId);
+        document.getElementById('reserve-modal').style.display = 'block';
+        document.getElementById('modal-overlay').style.display = 'block';
+    }
+
+    // Закрытие модального окна бронирования
+    function closeReserveModal() {
+        document.getElementById('reserve-modal').style.display = 'none';
+        document.getElementById('modal-overlay').style.display = 'none';
+    }
+
+    // Открытие модального окна добавления сеанса
+    function openAddSessionModal() {
+        loadMoviesForSession();
+        document.getElementById('add-session-modal').style.display = 'block';
+        document.getElementById('modal-overlay').style.display = 'block';
+    }
+
+    // Закрытие модального окна добавления сеанса
+    function closeAddSessionModal() {
+        document.getElementById('add-session-modal').style.display = 'none';
+        document.getElementById('modal-overlay').style.display = 'none';
+    }
+
+    // Загрузка списка фильмов для добавления сеанса
+    function loadMoviesForSession() {
+        fetch('/rgz/api/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                jsonrpc: '2.0',
+                method: 'get_movies',
+                params: {},
+                id: 1
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const movieSelect = document.getElementById('add-session-movie-id');
+            movieSelect.innerHTML = '';
+
+            data.result.movies.forEach(movie => {
+                const option = document.createElement('option');
+                option.value = movie.id;
+                option.textContent = movie.title;
+                movieSelect.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Ошибка загрузки фильмов:', error));
+    }
+
+    // Бронирование или снятие брони
+    function reserveSeat(seatNumber, currentUser) {
+        const action = currentUser === '{{ session.get("username") }}' ? 'cancel_reservation' : 'reserve_seat';
+
+        fetch('/rgz/api/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                jsonrpc: '2.0',
+                method: action,
+                params: { session_id: currentSessionId, seat_number: seatNumber },
+                id: 1
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error.message);
+            } else {
+                alert(data.result.message);
+                // Перезагружаем состояние мест
+                loadSeats(currentSessionId);
+            }
+        })
+        
+    }
+
+    // Удаление сеанса
+    function deleteSession(sessionId) {
+        if (confirm('Вы уверены, что хотите удалить этот сеанс?')) {
+            fetch('/rgz/api/', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    jsonrpc: '2.0',
+                    method: 'delete_session',
+                    params: { id: sessionId },
+                    id: 1
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error.message);
+                } else {
+                    alert('Сеанс удалён!');
+                    loadSessions();
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка удаления сеанса:', error);
+            });
+        }
+    }
+
+    function editSession(sessionId) {
+        const movieId = document.getElementById('add-session-movie-id').value;
+        const sessionTime = document.getElementById('add-session-datetime').value;
+        const availableSeats = document.getElementById('add-session-seats').value;
+    
+        if (!movieId || !sessionTime || !availableSeats) {
+            alert('Пожалуйста, заполните все поля.');
+            return;
+        }
+    
+        fetch('/rgz/api/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                jsonrpc: '2.0',
+                method: 'edit_session',
+                params: {
+                    id: sessionId,
+                    movie_id: movieId,
+                    session_time: sessionTime,
+                    available_seats: availableSeats
+                },
+                id: 1
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error.message);
+            } else {
+                alert('Сеанс успешно отредактирован!');
+                closeAddSessionModal();
+                loadSessions();
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка редактирования сеанса:', error.message);
+            alert('Произошла ошибка при редактировании сеанса.');
+        });
+    }
+    
+    function openEditSessionModal(sessionId, movieId, sessionTime, availableSeats) {
+        const modal = document.getElementById('edit-session-modal');
+        const overlay = document.getElementById('modal-overlay');
+    
+    
+        // Устанавливаем текущие значения в форму
+        document.getElementById('edit-session-movie-id').value = movieId;
+        document.getElementById('edit-session-datetime').value = new Date(sessionTime).toISOString().slice(0, 16);
+        document.getElementById('edit-session-seats').value = availableSeats;
+    
+        // Сохраняем текущий ID сеанса для редактирования
+        modal.dataset.sessionId = sessionId;
+    
+        // Показываем модальное окно
+        modal.style.display = 'block';
+        overlay.style.display = 'block';
+    }
+    
+    function closeEditSessionModal() {
+        const modal = document.getElementById('edit-session-modal');
+        const overlay = document.getElementById('modal-overlay');
+    
+        if (modal) modal.style.display = 'none';
+        if (overlay) overlay.style.display = 'none';
+    }
+    
+    function loadSeats(sessionId) {
+        fetch('/rgz/api/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                jsonrpc: '2.0',
+                method: 'get_seats',
+                params: { session_id: sessionId },
+                id: 1
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(text => { throw new Error(text) });
+            }
+            return response.json();
+        })
+        .then(data => {
+            const seatList = document.getElementById('seat-list');
+            seatList.innerHTML = '';
+    
+            // Проверяем наличие данных о местах
+            if (data.result && data.result.seats) {
+                let userReservations = data.result.seats.filter(seat => seat.user === '{{ session.get("username") }}').length;
+    
+                data.result.seats.sort((a, b) => a.number - b.number).forEach(seat => {
+                    const seatButton = document.createElement('button');
+                    seatButton.textContent = `Место ${seat.number}`;
+                    seatButton.disabled = seat.user && seat.user !== '{{ session.get("username") }}';
+    
+                    // Определяем класс кнопки в зависимости от состояния
+                    if (!seat.user) {
+                        seatButton.className = 'free'; // Свободное место
+                    } else if (seat.user === '{{ session.get("username") }}') {
+                        seatButton.className = 'own-reservation'; // Место пользователя
+                    } else {
+                        seatButton.className = 'reserved'; // Место занято другим пользователем
+                    }
+    
+                    // Обработчик бронирования/снятия брони
+                    seatButton.onclick = () => {
+                        if (seat.user === '{{ session.get("username") }}' || userReservations < 5) {
+                            reserveSeat(seat.number, seat.user);
+                            if (!seat.user) userReservations++;
+                            else userReservations--;
+                        } else {
+                            alert('Вы не можете забронировать более 5 мест.');
+                        }
+                    };
+    
+                    seatList.appendChild(seatButton);
+                });
+            } 
+        })
+        .catch(error => {
+            console.error('Ошибка загрузки мест:', error.message);
+        });
+    }
+    
+    function addSession() {
+        const movieId = document.getElementById('add-session-movie-id').value;
+        const sessionTime = document.getElementById('add-session-datetime').value;
+        const availableSeats = document.getElementById('add-session-seats').value;
+    
+        if (!movieId || !sessionTime || !availableSeats) {
+            alert('Пожалуйста, заполните все поля.');
+            return;
+        }
+    
+        fetch('/rgz/api/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                jsonrpc: '2.0',
+                method: 'add_session',
+                params: {
+                    movie_id: movieId,
+                    session_time: sessionTime,
+                    available_seats: availableSeats
+                },
+                id: 1
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error.message);
+            } else {
+                alert('Сеанс успешно добавлен!');
+                closeAddSessionModal();
+                loadSessions();
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка добавления сеанса:', error.message);
+            alert('Произошла ошибка при добавлении сеанса.');
+        });
+    }
+    
+    function saveSessionEdit() {
+        const sessionId = document.getElementById('edit-session-modal').dataset.sessionId;
+        const movieId = document.getElementById('edit-session-movie-id').value;
+        const sessionTime = document.getElementById('edit-session-datetime').value;
+        const availableSeats = document.getElementById('edit-session-seats').value;
+    
+        if (!movieId || !sessionTime || !availableSeats) {
+            alert('Пожалуйста, заполните все поля.');
+            return;
+        }
+    
+        fetch('/rgz/api/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                jsonrpc: '2.0',
+                method: 'edit_session',
+                params: {
+                    id: sessionId,
+                    movie_id: movieId,
+                    session_time: sessionTime,
+                    available_seats: availableSeats
+                },
+                id: 1
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                alert(data.error.message);
+            } else {
+                alert('Сеанс успешно отредактирован!');
+                closeEditSessionModal();
+                loadSessions();
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка редактирования сеанса:', error.message);
+            alert('Произошла ошибка при редактировании сеанса.');
+        });
+    }
+    
+    function loadMoviesForEditSession() {
+        fetch('/rgz/api/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                jsonrpc: '2.0',
+                method: 'get_movies',
+                params: {},
+                id: 1
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const movieSelect = document.getElementById('edit-session-movie-id');
+            movieSelect.innerHTML = '';
+    
+            data.result.movies.forEach(movie => {
+                const option = document.createElement('option');
+                option.value = movie.id;
+                option.textContent = movie.title;
+                movieSelect.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Ошибка загрузки фильмов:', error));
+    }
+    
+    // Загружаем сеансы при загрузке страницы
+    document.addEventListener('DOMContentLoaded', loadSessions);
+</script>
+
+<style>
+    button.free {
+        background-color: #28a745; /* Зеленый */
+        color: white;
+    }
+
+    button.reserved {
+        background-color: #dc3545; /* Красный */
+        color: white;
+        cursor: not-allowed;
+    }
+
+    button.own-reservation {
+        background-color: #ffc107; /* Желтый */
+        color: black;
+    }
+</style>
+
+{% endblock %}

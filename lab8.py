@@ -11,9 +11,9 @@ lab8 = Blueprint('lab8', __name__)
 @lab8.route('/lab8/')
 def lab8_index():
     if current_user.is_authenticated:
-        username = current_user.login  # Логин пользователя
+        username = current_user.login  
     else:
-        username = "Аноним"  # Если пользователь не авторизован
+        username = "Аноним" 
     return render_template('lab8/index.html', username=username)
 
 @lab8.route('/lab8/login/', methods = ['GET', 'POST'])

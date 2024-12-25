@@ -1,0 +1,76 @@
+{% extends 'base2.html' %}
+
+{% block title %}Регистрация{% endblock %}
+
+{% block content %}
+<section>
+    <h1>Регистрация</h1>
+    <form id="register-form">
+        <div>
+            <label for="name">Имя:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div>
+            <label for="login">Логин:</label>
+            <input type="text" id="login" name="login" required>
+        </div>
+        <div>
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div>
+            <label for="password_confirm">Подтверждение пароля:</label>
+            <input type="password" id="password_confirm" name="password_confirm" required>
+        </div>
+        <div>
+            <button type="button" onclick="submitRegister()">Зарегистрироваться</button>
+        </div>
+    </form>
+
+    <div id="error-message" class="error" style="display: none;">
+        <p></p>
+    </div>
+
+    <p>Уже есть аккаунт? <a href="{{ url_for('rgz.login') }}">Войти</a></p>
+</section>
+
+<script>
+    function submitRegister() {
+        const name = document.getElementById('name').value;
+        const login = document.getElementById('login').value;
+        const password = document.getElementById('password').value;
+        const passwordConfirm = document.getElementById('password_confirm').value;
+
+        fetch('/rgz/api/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                jsonrpc: '2.0',
+                method: 'register',
+                params: {
+                    name: name,
+                    login: login,
+                    password: password,
+                    password_confirm: passwordConfirm
+                },
+                id: 1
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                const errorMessage = document.getElementById('error-message');
+                errorMessage.style.display = 'block';
+                errorMessage.querySelector('p').innerText = data.error.message;
+            } else {
+                alert('Регистрация прошла успешно!');
+                window.location.href = "{{ url_for('rgz.login') }}";
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            alert('Произошла ошибка при регистрации.');
+        });
+    }
+</script>
+{% endblock %}
